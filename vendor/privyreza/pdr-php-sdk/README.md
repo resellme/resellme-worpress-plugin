@@ -1,1 +1,0 @@
-## Pnrhost Domain Registrar SDK
