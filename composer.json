@@ -1,0 +1,5 @@
+{
+    "require": {
+        "privyreza/rm-php-sdk": "^1.0"
+    }
+}
