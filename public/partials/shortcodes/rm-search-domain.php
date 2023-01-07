@@ -4,8 +4,13 @@ function rm_search_domain_shortcode() {
     $response = '';
 $form = '<form class="rm-form"';
 $form .= ' action="" method="GET">
-<input type="text" name="domain_name" placeholder="Domain">
-<input type="submit" value="Search Domain"/>
+<h3>Search Your Perfect Domain Name</h3>
+<div class="rm-form-group">
+<input class="rm-input" type="text" name="domain_name" placeholder="Enter Domain Name">
+</div>
+<div class="rm-form-group">
+<input class="rm-input-submit" type="submit" value="Search Domain"/>
+</div>
 </form>
 ';
 
@@ -83,7 +88,7 @@ function rm_search_domain() {
         $form = '<form class="rm-form"';
         $form .= ' action="/register-domain" method="POST">
         <input type="text" name="domain" placeholder="Domain">
-        <input type="submit" value="Search Domain"/>
+        <input class="resellme-domain-search" type="submit" value="Search Domain"/>
         </form>
         ';
 

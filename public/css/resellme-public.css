@@ -1,4 +1,19 @@
-/**
- * All of the CSS for your public-facing functionality should be
- * included in this file.
- */
+.rm-form {
+    padding: 30px;
+}
+
+.rm-input {
+    height: 30px;
+    width: 100%;
+}
+
+.rm-input-submit {
+    width: 200px;
+    height: 30px;
+    cursor: pointer;
+    background: inherit;
+}
+
+.rm-form-group {
+    padding: 20px 0 20px 0;
+}
