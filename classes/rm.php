@@ -4,6 +4,8 @@ class RM {
 	const PLUGIN_DIR 	= '' ;
 
 	private static $initiated = false; 
+
+	private static $plugin_name = 'resellme'; 
 	
 	public static function init() {
 		if ( ! self::$initiated ) {
@@ -18,7 +20,7 @@ class RM {
 		add_action('wp_enqueue_scripts', 'callback_for_setting_up_scripts');
 
 		// Settings page
-		// add_action( 'admin_menu', 'rm_add_settings_page' );
+		add_action('admin_menu', 'rm_add_settings_page', 9);  
 
 		// add_action( 'admin_init', 'rm_register_settings' );
 	}
@@ -34,8 +36,11 @@ class RM {
 	}
 
 	// Settings page
-	function rm_add_settings_page() {
-		add_options_page( 'Example plugin page', 'Example Plugin Menu', 'manage_options', 'rm-plugin', 'rm_render_plugin_settings_page' );
+	public function rm_add_settings_page() {
+		add_menu_page(  $this->plugin_name, 'Resellme', 'administrator', $this->plugin_name, array( $this, 'rm_render_plugin_settings_page' ), 'img/resellme-brand-mark.png', 26 );
+
+		//add_submenu_page( '$parent_slug, $page_title, $menu_title, $capability, $menu_slug, $function );
+		add_submenu_page( $this->plugin_name, 'Plugin Name Settings', 'Settings', 'administrator', $this->plugin_name.'-settings', array( $this, 'displayPluginAdminSettings' ));
 	}
 
 	function rm_render_plugin_settings_page() {
