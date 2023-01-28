@@ -111,6 +111,10 @@ class Resellme_Public {
         include plugin_dir_path(__FILE__) . 'partials/shortcodes/rm-nameservers.php';
         include plugin_dir_path(__FILE__) . 'partials/shortcodes/rm-register-domain.php';
         include plugin_dir_path(__FILE__) . 'partials/shortcodes/rm-domains.php';
+
+        // Custom Ajax Actions
+        include plugin_dir_path(__FILE__) . 'ajax/resellme.php';
+        include plugin_dir_path(__FILE__) . 'ajax/paynow-express.php';
 	}
 
 }

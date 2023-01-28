@@ -177,6 +177,11 @@ class Resellme_Admin {
 		      $args
 		    );
 
+		    register_setting(
+	            'resellme_general_settings',
+	            'resellme_api_key'
+		    );
+
 		    // Paynow Settings - ID
 		    unset($args2);
 
@@ -192,7 +197,7 @@ class Resellme_Admin {
 		     );
 		    add_settings_field(
 		      'paynow_id',
-		      'Paynow ID <a href="https://www.resellme.co.zw/docs/paynow-keys/" target="_blank">Get The Key</a>',
+		      'Paynow ID <a href="https://www.resellme.co.zw/docs/paynow-keys/" target="_blank">Get The ID</a>',
 		      array( $this, 'resellme_render_settings_field' ),
 		      'resellme_general_settings',
 		      'resellme_general_section',
@@ -221,7 +226,7 @@ class Resellme_Admin {
 		     );
 		    add_settings_field(
 		      'paynow_secret',
-		      'Paynow Secret <a href="https://www.resellme.co.zw/docs/paynow-keys/" target="_blank">Get The Key</a>',
+		      'Paynow Secret <a href="https://www.resellme.co.zw/docs/paynow-keys/" target="_blank">Get The Secret</a>',
 		      array( $this, 'resellme_render_settings_field' ),
 		      'resellme_general_settings',
 		      'resellme_general_section',
