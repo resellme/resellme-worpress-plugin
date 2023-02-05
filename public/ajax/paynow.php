@@ -4,14 +4,12 @@ add_action('wp_ajax_rm_paynow', 'rm_paynow');
 add_action( 'wp_ajax_nopriv_rm_paynow', 'rm_paynow' );
 
 function rm_paynow() {
-	require_once dirname( __DIR__ ) . '/lib/vendor/autoload.php';
  	$amount = $_POST['amount'];
  	$domain =  $_POST['domain'];
 
 	$paynow_id = get_option('paynow_id');
 	$paynow_secret = get_option('paynow_secret');
-
-
+	
 	$paynow = new Paynow\Payments\Paynow(
 		$paynow_id,
 		$paynow_secret,

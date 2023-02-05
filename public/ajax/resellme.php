@@ -1,7 +1,7 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 // Search Domain
 add_action('wp_ajax_rm_search_domain', 'rm_search_domain');
 add_action( 'wp_ajax_nopriv_rm_search_domain', 'rm_search_domain' );
@@ -31,37 +31,9 @@ function rm_search_domain() {
 }
 
 function rm_save_domain() {
-    //  $contact = [
-    //     'first_name'             => $_POST['first_name'],
-    //     'last_name'              => $_POST['last_name'],
-    //     'email'                  => $_POST['email'],
-    //     'company'                => $_POST['company'],
-    //     'street_address'         => $_POST['street_address'],
-    //     'mobile'                 => $_POST['mobile'],
-    //     'core_business'          => $_POST['core_business'],
-    //     'city'                   => $_POST['city'],
-    //     'country'                => $_POST['country']
-    // ];
-
-    // // Nameservers
-    // $ns = [
-    //     'ns1' => $_POST['ns1'],
-    //     'ns2' => $_POST['ns2'],
-    //     'ns3' => $_POST['ns3'],
-    //     'ns4' => $_POST['ns4']
-    // ];
     $domain = $_POST['domain'];
     $contact = $_POST['contact'];
     $ns = $_POST['nameservers'];
-
-    // prepare data
-    $data = [
-        'domain'            =>  $domain,
-        'contacts'          =>  [
-            'registrant'    =>  $contact
-        ],
-        'nameservers'       =>  $ns
-    ];
 
     // Insert into custom post
     $post = array(
@@ -86,8 +58,7 @@ function rm_save_domain() {
     // Extra Domain fields - name
     add_post_meta( $post_id, 'domain', $domain, true);
 
-    echo json_encode($contact['first_name']);
-    // echo  'registered';
+    echo  'saved';
 
     die();
 }
@@ -98,17 +69,50 @@ function rm_register_domain() {
     $post = get_page_by_title( $domain, OBJECT, 'domain' );
     $meta_values   = get_post_meta( $post->ID );
 
-
-
     // Register Domain
-    // $token = get_option('resellme_api_key');
+    $token = get_option('resellme_api_key');
 
-    // $rm = new Resellme\Client($token);
-    // $register = $rm->registerDomain($data);
+    $rm = new Resellme\Client($token);
+    // prepare data
 
-    echo json_encode($meta_values);
+    // NS
+    $ns = [
+        "ns1" => $meta_values['ns1'][0],
+        "ns2" => $meta_values['ns2'][0],
+    ];
 
-    // echo  'registered';
+    if(isset($meta_values['ns3'][0])) {
+        $ns["ns3"] = $meta_values['ns3'][0];
+    } 
+
+    if(isset($meta_values['ns4'][0])) {
+        $ns["ns4"] = $meta_values['ns4'][0];
+    } 
+
+    // Contact
+    $contact = [
+        'first_name' => $meta_values['first_name'][0],
+        'last_name' => $meta_values['last_name'][0],
+        'email' => $meta_values['email'][0],
+        'company' => $meta_values['company'][0],
+        'street_address' => $meta_values['street_address'][0],
+        'mobile' => $meta_values['mobile'][0],
+        'core_business' => $meta_values['core_business'][0],
+        'city' => $meta_values['city'][0],
+        'country' => $meta_values['country'][0],
+    ];
+
+    $data = [
+        'domain'            =>  $domain,
+        'contacts'          =>  [
+            'registrant'    =>  $contact
+        ],
+        'nameservers'       =>  $ns
+    ];
+
+    $register = $rm->registerDomain($data);
+
+    echo  json_encode($register);
 
     die();
 }

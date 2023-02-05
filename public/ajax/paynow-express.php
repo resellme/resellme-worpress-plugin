@@ -1,29 +1,35 @@
 <?php
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
 // Intiate paymemt
 add_action('wp_ajax_rm_paynow_express', 'rm_paynow_express');
 add_action( 'wp_ajax_nopriv_rm_paynow_express', 'rm_paynow_express' );
 
+add_action('wp_ajax_rm_paynow_express_poll', 'rm_paynow_express_poll');
+add_action( 'wp_ajax_nopriv_rm_paynow_express_poll', 'rm_paynow_express_poll' );
+
 function rm_paynow_express() {
-	require_once dirname( __DIR__ ) . '/lib/vendor/autoload.php';
- 	global $wpdb; // this is how you get access to the database
  	$amount = $_POST['amount'];
- 	$order_id = $_POST['order_id'];
- 	$mobile =  $_POST['phone_number'];
+ 	$mobile =  $_POST['payment_phone_number'];
+ 	$domain = $_POST['domain'];
      
-	$payment_method = (substr($mobile, 0, 5) == '26371') ? 'onemoney' : 'ecocash';
+	$payment_method = (substr($mobile, 0, 3) == '071') ? 'onemoney' : 'ecocash';
+	$paynow_id = get_option('paynow_id');
+	$paynow_secret = get_option('paynow_secret');
 
 	$paynow = new Paynow\Payments\Paynow(
-		'12656',
-		'9004368e-35f5-4f6c-8dc5-605f9edd9c83',
+		$paynow_id,
+		$paynow_secret,
 		'http://example.com/gateways/paynow/update',
 		'http://example.com/return?gateway=paynow'
 	);
 
 	$current_user = wp_get_current_user();
 
-	$payment = $paynow->createPayment($order_id, $current_user->user_email);
+	$payment = $paynow->createPayment($domain, $current_user->user_email);
 
-	$payment->add('Tender-Subs', $amount);
+	$payment->add('Domain Registration', $amount);
 
 	$response = $paynow->sendMobile($payment, $mobile, $payment_method);
 
@@ -32,33 +38,23 @@ function rm_paynow_express() {
     die();
 }
 
-function paynow_express_poll_() {
-	require_once dirname( __DIR__ ) . '/lib/vendor/autoload.php';
-	global $woocommerce;
- 	global $wpdb; // this is how you get access to the database
+function rm_paynow_express_poll() {
  	$pollUrl = $_POST['poll_url'];
- 	$order_id = $_POST['order_id'];
+ 	$domain = $_POST['domain'];
+ 	$paynow_id = get_option('paynow_id');
+	$paynow_secret = get_option('paynow_secret');
 
 	$paynow = new Paynow\Payments\Paynow(
-		'12656',
-		'9004368e-35f5-4f6c-8dc5-605f9edd9c83',
+		$paynow_id,
+		$paynow_secret,
 		'http://example.com/gateways/paynow/update',
 		'http://example.com/return?gateway=paynow'
 	);
 
 	$status = $paynow->pollTransaction($pollUrl);
 
-	$order = null;
-
 	if ($status->paid()) {
 		$status = 'paid';
-
-		// mark order as paid
-		$order = wc_get_order( $order_id );
-
-		if($order){
-		   $order->update_status( 'completed', '', true );
-		}
 	} else {
 		$status = 'not_paid';
 	}

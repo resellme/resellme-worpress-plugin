@@ -1,5 +1,6 @@
 {
     "require": {
-        "privyreza/rm-php-sdk": "^3.0"
+        "privyreza/rm-php-sdk": "^3.0",
+        "paynow/php-sdk": "^1.0"
     }
 }

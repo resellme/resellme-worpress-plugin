@@ -150,7 +150,7 @@ add_action( 'add_meta_boxes', 'rm_domain_metabox' );
 function rm_domain_metabox_html( $post ) {
     ?>
 	<label for="ns4">Domain Name</label></br>
-    <input id="domain" type="text" name="domain" value="<?php echo get_post_meta($post->ID, "domain", true); ?>"/></br>
+    <input id="domain" type="text" name="domain_name" value="<?php echo get_post_meta($post->ID, "domain", true); ?>"/></br>
     <?php
 }
 
@@ -234,7 +234,7 @@ function rm_contact_metabox_html( $post ) {
 }
 
 // Update Meta Data
-if (isset($_POST['domain'])) {
+if (isset($_POST['domain_name'])) {
 	add_action( 'save_post', 'save_meta_box_data' );
 }
 
@@ -269,29 +269,29 @@ function save_meta_box_data($post_id) {
 	}
 
 	// Domain 
-	$domain = $_POST['domain'];
+	$domain = $_POST['domain_name'];
 	update_post_meta($post_id, 'domain', $domain);
 
 	// Submit new registration / modification
-	$domainData = [
-		'domain' 			=> $domain,
-		'nameservers' 		=> $ns,
-		'contacts'        	=>  [
-            'registrant'    =>  $contact
-        ]
-	];
+	// $domainData = [
+	// 	'domain' 			=> $domain,
+	// 	'nameservers' 		=> $ns,
+	// 	'contacts'        	=>  [
+    //         'registrant'    =>  $contact
+    //     ]
+	// ];
 
-	$rm = new Resellme\RMClient(RM_TOKEN);
-	$filters = [
-		'name' => $domain
-	];
+	// $rm = new Resellme\RMClient(RM_TOKEN);
+	// $filters = [
+	// 	'name' => $domain
+	// ];
 
-	$eDomain = $rm->getDomains($filters);
+	// $eDomain = $rm->getDomains($filters);
 
-	if (empty($eDomain)) {
-		$rm->registerDomain($domainData);
-	} else {
-		// Update
+	// if (empty($eDomain)) {
+	// 	$rm->registerDomain($domainData);
+	// } else {
+	// 	// Update
 
-	}
+	// }
 }

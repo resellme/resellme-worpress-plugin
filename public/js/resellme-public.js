@@ -29,6 +29,7 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 	$(document).ready(function() {
+		var price = 0;
 		// Search Domain
 		$('#rm-search-domain').on('click', function() {
 			$('#rm-search-domain-form').hide();
@@ -46,9 +47,10 @@
 				var html = '';
 
 				if (data.status == 'available') {
+					price = data.selling_price.ZWL;
 			        html += '<p> ' + domain + ' is available for $';
 
-			        html += data.selling_price.ZWL;
+			        html += price;
 			       	html += ' ZWL</p>';
 
 			        document.getElementById('rm-search-response').innerHTML = html;
@@ -79,10 +81,10 @@
 			$('#rm-nameservers').show();
 		});
 
-		// Hide NS Details
+		// Submit NS Details
 		$('#rm-submit-ns').on('click', function() {
 			$('#rm-nameservers').hide();
-
+			
 			// Submit Domain
 			var domain = $('#domain-name').val();
 			var url = $('#rm-search-domain-url').val();
@@ -128,25 +130,73 @@
 
 			// Submit values to local ajax url
 			$.post(url, data, function(response) {
-				var data = JSON.parse(response);
-
-				alert(data);
-
-				if (data.status == 'registered') {
-					$('#rm-registered').show();
+				if (response == 'saved') {
+					$('#rm-payments').show();
 				} else {
-
+					//
 				}
        		}).fail(function(xhr, status, error) {
-       			alert(xhr.responseText)
        			console.log(error);
        		});
-
 		});
 
-		$('#complete-order').on('click', function() {
+		// Save Details and trigger payments
+		$('#rm-complete-order').on('click', function() {
+			var domain = $('#domain-name').val();
+			var url = $('#rm-search-domain-url').val();
 
+			// Payments
+			var payment_phone_number = $('#rm-payment-phone-number').val();
+
+			var url = $('#rm-search-domain-url').val();
+
+			var data = {
+				action: 'rm_paynow_express',
+				domain: domain,
+				amount: price,
+				payment_phone_number: payment_phone_number
+			};
+
+			// Submit values to local ajax url
+			$.post(url, data, function(response) {
+				poll(url, response, domain);
+       		}).fail(function(xhr, status, error) {
+       			console.log(error);
+       		});
 		});
+
+
+		// poll payment
+		function poll(url, pollUrl,domain) {
+			// Submit values to local ajax url
+			var data = {
+				action: 'rm_paynow_express_poll',
+				poll_url: pollUrl,
+				domain: domain
+			}
+
+			setTimeout(
+				$.post(url, data, function(response) {
+				if (response == 'paid') {
+					// Submit Domain
+					var data = {
+						action: 'rm_register_domain',
+						domain: domain
+					};
+
+					$.post(url, data, function(response) {
+						console.log(response);
+		       		}).fail(function(xhr, status, error) {
+		       			console.log(error);
+		       		});
+					
+				} else {
+					poll(url, pollUrl, domain);
+				}
+       		}).catch(error => {
+       			// Error
+       		}), 10000)
+		}
 
 	});
 

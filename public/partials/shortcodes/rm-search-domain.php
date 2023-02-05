@@ -55,4 +55,13 @@ function rm_search_domain_shortcode() { ?>
 <form>
 </div>
 
+<!-- Show NS details -->
+<div id="rm-payments" class="rm-payments" style="display: none;">
+<form>
+<h3>Enter Ecocash / OneMoney Number for payments</h3>
+<input id="rm-payment-phone-number" type="text" required name="rm_payment_phone_number" placeholder="0778329242"><br>
+<a href="javascript:0;" id="rm-complete-order" class="btn-link">Complete Order</a>
+<form>
+</div>
+
 <?php }

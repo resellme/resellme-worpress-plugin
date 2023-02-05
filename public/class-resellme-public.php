@@ -115,6 +115,7 @@ class Resellme_Public {
         // Custom Ajax Actions
         include plugin_dir_path(__FILE__) . 'ajax/resellme.php';
         include plugin_dir_path(__FILE__) . 'ajax/paynow-express.php';
+        include plugin_dir_path(__FILE__) . 'ajax/paynow.php';
 	}
 
 }
