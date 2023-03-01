@@ -2,7 +2,9 @@
 // register shortcode
 add_shortcode('rm-search-domain', 'rm_search_domain_shortcode');
 // function that runs when shortcode is called
-function rm_search_domain_shortcode() { ?>
+function rm_search_domain_shortcode() { 
+    // auth_redirect();
+?>
 <form  id="rm-search-domain-form" class="rm-form" action="" method="GET">
 <h3>Search Your Perfect Domain Name</h3>
 <div class="rm-form-group">

@@ -118,4 +118,8 @@ class Resellme_Public {
         include plugin_dir_path(__FILE__) . 'ajax/paynow.php';
 	}
 
+	public function rm_force_login() {
+		$post = get_page_by_title( 'Search Domain', OBJECT );
+	}
+
 }

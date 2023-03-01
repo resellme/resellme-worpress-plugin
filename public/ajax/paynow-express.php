@@ -27,6 +27,10 @@ function rm_paynow_express() {
 
 	$current_user = wp_get_current_user();
 
+	echo json_encode($current_user);
+
+	die();
+
 	$payment = $paynow->createPayment($domain, $current_user->user_email);
 
 	$payment->add('Domain Registration', $amount);
